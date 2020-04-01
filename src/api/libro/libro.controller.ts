@@ -1,14 +1,18 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { LibroDto } from '../../libro-dto';
 import { LibroDtosinId } from '../../libro-dtosin-id';
+import { RestService } from '../rest/rest.service';
 
 @Controller('libro')
 export class LibroController {
 
+  private id: number = 0;
+  constructor(private restService: RestService) { }
+
   @Get() // listado
   findAll(): LibroDto[] {
     // buscar los datos en la BBDD
-    return [];
+    return this.restService.getLibros();
   }
 
   @Post() // añadir un objeto
@@ -19,6 +23,10 @@ export class LibroController {
      libroDTO.titulo = createDto.titulo;
      libroDTO.autor = createDto.autor;
      libroDTO.fecha = createDto.fecha;
+
+     this.restService.addLibro(libroDTO);
+    this.id++;
+
      return libroDTO;
    }
 
